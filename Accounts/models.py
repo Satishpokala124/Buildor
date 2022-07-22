@@ -1,15 +1,23 @@
+import re
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.db.models import Max
 from django.utils.translation import gettext_lazy as _
 
 
+def validate_email(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    return True if re.fullmatch(regex, email) else False
+
+
 class MyUserManager(UserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
         if not email or not len(email.strip()):
-            raise TypeError("email can't be None or empty")
+            raise AttributeError("email can't be None or empty")
         if not password or not len(password.strip()):
-            raise TypeError("password can't be None or empty")
+            raise AttributeError("password can't be None or empty")
+        if not validate_email(email):
+            raise AttributeError('invalid email')
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("id", self.custom_id_generator())
