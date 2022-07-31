@@ -30,6 +30,7 @@ class MyUserManager(UserManager):
             raise AttributeError("password can't be None or empty")
         if not validate_email(email):
             raise AttributeError('invalid email')
+        validate_password(password=password)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("id", self.custom_id_generator())
