@@ -42,8 +42,17 @@ class MyUserManager(UserManager):
         3. return new ID as a string
         """
         prefix = f'{self.model._meta.app_label[0]}{self.model._meta.object_name[0]}'
-        id_max = int(self.aggregate(id_max=Max('id'))['id_max'].strip(prefix))
-        id_max = str(id_max+1).rjust(15, '0')
+        # Filter all the users with their id's starting with the same prefixand get the highest id of these users
+        id_max = self.filter(
+            id__startswith=prefix
+        ).aggregate(
+            id_max=Max('id')
+        )['id_max']
+        # If there are no users then the new id starts from 1
+        if not id_max:
+            return f'{prefix}{"1".rjust(15, "0")}'
+        id_max = int(str(id_max).strip(prefix))
+        id_max = str(id_max+1).rjust(10, '0')
         new_id = f'{prefix}{id_max}'
         return new_id
 
@@ -59,7 +68,6 @@ class User(AbstractUser):
     last_name = models.CharField(_("last name"), max_length=150, blank=False)
     email = models.EmailField(_("email address"), blank=False, unique=True)
     phone_number = models.CharField(max_length=10)
-
     """
     1. Connect the custom UserManager class (MyUserManager) to our User class.
     2. This is necessary to use our custom UserManager class and its functionalities.
