@@ -50,7 +50,7 @@ class MyUserManager(UserManager):
         )['id_max']
         # If there are no users then the new id starts from 1
         if not id_max:
-            return f'{prefix}{"1".rjust(15, "0")}'
+            return f'{prefix}{"1".rjust(10, "0")}'
         id_max = int(str(id_max).strip(prefix))
         id_max = str(id_max+1).rjust(10, '0')
         new_id = f'{prefix}{id_max}'
