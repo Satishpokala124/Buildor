@@ -38,8 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'Accounts.apps.AccountsConfig',
-    'rest_framework'
+    'Builders.apps.BuildersConfig',
+    'ManForce.apps.ManforceConfig',
+    'Employees.apps.EmployeesConfig',
+    'Bookings.apps.BookingsConfig',
+    'BluePrints.apps.BlueprintsConfig',
+    'Finance.apps.FinanceConfig'
 ]
 
 MIDDLEWARE = [

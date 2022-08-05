@@ -7,7 +7,7 @@ from django.db.models import Max
 from django.utils.translation import gettext_lazy as _
 
 
-def validate_email(email):
+def validate_email(email: str) -> bool:
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
     return True if re.fullmatch(regex, email) else False
 
@@ -43,7 +43,7 @@ class MyUserManager(UserManager):
         3. return new ID as a string
         """
         prefix = f'{self.model._meta.app_label[0]}{self.model._meta.object_name[0]}'
-        # Filter all the users with their id's starting with the same prefixand get the highest id of these users
+        # Filter all the users whose id's start with the same prefix and get the highest id of these users
         id_max = self.filter(
             id__startswith=prefix
         ).aggregate(
